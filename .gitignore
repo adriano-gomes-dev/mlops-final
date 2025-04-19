@@ -1,3 +1,5 @@
+mlartifacts/*
 desktop.ini
+mlflow.d
 module_api.py
 __pycache__
