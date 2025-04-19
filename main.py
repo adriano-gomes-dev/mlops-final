@@ -33,7 +33,7 @@ app = fastapi.FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"message": "Hello World"}
+    return {"message": "Predição de INCC. API para predição de INCC com base na data."}
 
 @app.get("/predict/{date}")
 def predict(date: str):
@@ -130,3 +130,4 @@ def main():
 
 if __name__ == "__main__":
     main() 
+
