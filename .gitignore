@@ -1,1 +1,12 @@
+mlartifacts/1/24b591eb279d477dbc5537bc2923da71/artifacts/linear_SVR_model/python_env.yaml
+mlartifacts/1/24b591eb279d477dbc5537bc2923da71/artifacts/linear_SVR_model/conda.yaml
+mlflow.d
+mlartifacts/1/24b591eb279d477dbc5537bc2923da71/artifacts/linear_SVR_model/MLmodel
+mlartifacts/1/24b591eb279d477dbc5537bc2923da71/artifacts/linear_SVR_model/model.pkl
+mlartifacts/1/24b591eb279d477dbc5537bc2923da71/artifacts/linear_SVR_model/requirements.txt
+mlartifacts/1/25bed907c4f44a4690452a9ca8407a20/artifacts/linear_regression_model/conda.yaml
+mlartifacts/1/25bed907c4f44a4690452a9ca8407a20/artifacts/linear_regression_model/MLmodel
+mlartifacts/1/25bed907c4f44a4690452a9ca8407a20/artifacts/linear_regression_model/model.pkl
+mlartifacts/1/25bed907c4f44a4690452a9ca8407a20/artifacts/linear_regression_model/python_env.yaml
+mlartifacts/1/25bed907c4f44a4690452a9ca8407a20/artifacts/linear_regression_model/requirements.txt
 desktop.ini
