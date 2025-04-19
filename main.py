@@ -18,12 +18,24 @@ import plotly.graph_objects as go
 import mlflow
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
-
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
+import fastapi
+
 #mlflow.set_tracking_uri("sqlite:///mlflow.db")
 mlflow.set_tracking_uri("http://localhost:5000")
+
+app = fastapi.FastAPI()
+
+@app.get("/")
+def read_root():
+    return {"message": "Hello World"}
+
+@app.get("/predict/{date}")
+def predict(date: str):
+    return {"date to predict": date}
+
 
 def experiment_linear_regression(df):
 
@@ -79,7 +91,7 @@ def main():
     print(df.head())
 
     mlflow.set_experiment("INCC Tracking")
-    
+
     # Experimento 1: Regressão Linear
     experiment_linear_regression(df)
 
