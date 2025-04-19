@@ -20,9 +20,16 @@ from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error, root_mean_squared_error
 from sklearn.svm import SVR
 
+def log_metrics(y_test, y_pred):
+    mse = mean_squared_error(y_test, y_pred)
+    mae = mean_absolute_error(y_test, y_pred)
+    rmse = root_mean_squared_error(y_test, y_pred)
+    
+    # Log the metrics
+    mlflow.log_metrics({"mse": mse, "rmse": rmse, "mae": mae})
 
 def experiment_linear_regression(X_train, X_test, y_train, y_test):
 
@@ -34,8 +41,7 @@ def experiment_linear_regression(X_train, X_test, y_train, y_test):
 
         y_pred = model.predict(X_test)
 
-        mse = mean_squared_error(y_test, y_pred)
-        mlflow.log_metric("mse", mse)
+        log_metrics(y_test, y_pred)
 
         print(f"Run ID: {run.info.run_id}")
 
@@ -51,9 +57,8 @@ def experiment_svr(X_train, X_test, y_train, y_test):
         model.fit(X_train, y_train)
 
         y_pred = model.predict(X_test)
-
-        mse = mean_squared_error(y_test, y_pred)
-        mlflow.log_metric("mse", mse)
+        
+        log_metrics(y_test, y_pred)
 
         print(f"Run ID: {run.info.run_id}")
 
