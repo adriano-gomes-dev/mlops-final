@@ -62,8 +62,8 @@ def experiment_svr(X_train, X_test, y_train, y_test):
 
 def main():
     # Lendo o arquivo de dados
-    # df = pd.read_csv('./data/dataset INCC.csv', sep="\t")
-    df = pd.read_csv('/Users/gms/MLOPS/mlops-final/data/dataset INCC.csv', sep="\t")
+    df = pd.read_csv('./data/dataset INCC.csv', sep="\t")
+    # df = pd.read_csv('/Users/gms/MLOPS/mlops-final/data/dataset INCC.csv', sep="\t")
     
     # Exibindo as primeiras linhas do DataFrame
     print("Primeiras linhas do DataFrame:")
