@@ -21,8 +21,6 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
-import fastapi
-
 #mlflow.set_tracking_uri("sqlite:///mlflow.db")
 mlflow.set_tracking_uri("http://localhost:5000")
 
@@ -30,6 +28,8 @@ mlflow.set_tracking_uri("http://localhost:5000")
 # prescisa instalar o fastapi
 # pip install fastapi[standard]
 # e rodar com o comando: python -m fastapi dev main.py
+
+import fastapi
 
 app = fastapi.FastAPI()
 
