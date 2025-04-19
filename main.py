@@ -22,13 +22,10 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
+#mlflow.set_tracking_uri("sqlite:///mlflow.db")
+mlflow.set_tracking_uri("http://localhost:5000")
 
 def experiment_linear_regression(df):
-    #mlflow.set_tracking_uri("sqlite:///mlflow.db")
-
-    mlflow.set_tracking_uri("http://localhost:5000")
-
-    mlflow.set_experiment("INCC Tracking")
 
     # Preparando os dados para o modelo
     X = df[['Data']]
@@ -81,6 +78,8 @@ def main():
     print("\nDataFrame após processamento:")
     print(df.head())
 
+    mlflow.set_experiment("INCC Tracking")
+    
     # Experimento 1: Regressão Linear
     experiment_linear_regression(df)
 
