@@ -26,6 +26,11 @@ import fastapi
 #mlflow.set_tracking_uri("sqlite:///mlflow.db")
 mlflow.set_tracking_uri("http://localhost:5000")
 
+# API - FastAPI
+# prescisa instalar o fastapi
+# pip install fastapi[standard]
+# e rodar com o comando: python -m fastapi dev main.py
+
 app = fastapi.FastAPI()
 
 @app.get("/")
