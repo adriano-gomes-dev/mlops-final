@@ -89,9 +89,9 @@ def main():
     # MLFlow Conexão Info
     mlflow.set_tracking_uri("http://127.0.0.1:5000")
     mlflow.set_experiment("INCC Tracking")
-
-    # X, y = process_data('./data/dataset INCC.csv')
-    df = process_data('/Users/gms/MLOPS/mlops-final/data/dataset INCC.csv')
+    
+    df = process_data('./data/dataset INCC.csv')
+    # df = process_data('/Users/gms/MLOPS/mlops-final/data/dataset INCC.csv')
 
     # Preparando os dados para o modelo
     X = df[['Data']]
