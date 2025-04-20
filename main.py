@@ -190,6 +190,8 @@ def main():
     # Promover o modelo com o menor MSE para a produção
     promote_model_to_production_based_on_mse()
 
+    # todo: refatorar o código para que o modelo seja carregado apenas uma vez
+
 
 if __name__ == "__main__":
     main() 
