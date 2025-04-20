@@ -13,7 +13,7 @@ from sklearn.model_selection import train_test_split
 # Importando bibliotecas deste projeto
 from core.preprocessdata import process_data
 from core.trains import experiment_linear_regression, experiment_svr
-from core.deployment import promote_model_to_production_based_on_mse, get_prediction_from_production_model
+from core.deployment import promote_model_to_production_based_on_mse
 
 def main():
     # MLFlow Conexão Info
