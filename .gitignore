@@ -4,3 +4,4 @@ mlflow.d
 module_api.py
 __pycache__
 __pycache__/*
+**/desktop.ini
