@@ -8,6 +8,7 @@ Script para análise de dados do INCC (Índice Nacional de Custo da Construção
 # Importando bibliotecas necessárias
 import pandas as pd
 import mlflow
+from preprocessdata import process_data
 from mlflow.tracking import MlflowClient
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
@@ -85,34 +86,12 @@ def promote_model_to_production_based_on_mse():
     )
 
 def main():
-    # Lendo o arquivo de dados
-    df = pd.read_csv('./data/dataset INCC.csv', sep="\t")
-    # df = pd.read_csv('/Users/gms/MLOPS/mlops-final/data/dataset INCC.csv', sep="\t")
-    
-    # Exibindo as primeiras linhas do DataFrame
-    print("Primeiras linhas do DataFrame:")
-    print(df.head())
-    
-    # Informações básicas sobre o DataFrame
-    print("\nInformações do DataFrame:")
-    print(df.info())
-    
-    # Convertendo a coluna 'INCC Geral' para float
-    df['INCC Geral float'] = df['INCC Geral'].apply(lambda x: float(x.replace('.', '').replace(',', '.')))
-    
-    # Removendo colunas desnecessárias
-    df.drop(columns=['INCC Geral'], inplace=True)
-    
-    print("\nDataFrame após processamento:")
-    print(df.head())
-
     # MLFlow Conexão Info
     mlflow.set_tracking_uri("http://127.0.0.1:5000")
     mlflow.set_experiment("INCC Tracking")
 
-    # Preparando os dados para o modelo
-    X = df[['Data']]
-    y = df[['INCC Geral float']]
+    # X, y = process_data('./data/dataset INCC.csv')
+    X, y = process_data('/Users/gms/MLOPS/mlops-final/data/dataset INCC.csv')
 
     # Split treino e teste
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
