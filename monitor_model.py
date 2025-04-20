@@ -6,11 +6,13 @@ import evidently
 from evidently import Report
 from evidently import DataDefinition
 from evidently.presets import RegressionPreset
+from evidently import ColumnMapping
+
 
 def load_new_data():
 
-    # X, y = process_data('./data/dataset INCC.csv')
-    X, y = process_data('/Users/gms/MLOPS/mlops-final/data/dataset INCC.csv')
+    X, y = process_data('./data/dataset INCC.csv')
+    #X, y = process_data('/Users/gms/MLOPS/mlops-final/data/dataset INCC.csv')
     return X, y
 
 def get_predictions(data):
