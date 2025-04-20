@@ -1,11 +1,13 @@
 import pandas as pd
-from preprocessdata import process_data
 import numpy as np
 import requests
 import evidently
 from evidently import Report
 from evidently import DataDefinition, Regression
 from evidently.presets import RegressionPreset
+
+# Importando bibliotecas deste projeto
+from core.preprocessdata import process_data
 
 def load_new_data():
 
