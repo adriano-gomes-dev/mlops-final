@@ -4,7 +4,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.svm import SVR
 
-from logs import log_metrics
+from core.logs import log_metrics
 
 def experiment_linear_regression(X_train, X_test, y_train, y_test):
 

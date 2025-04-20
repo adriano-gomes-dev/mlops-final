@@ -43,10 +43,10 @@ def get_prediction_from_production_model(value_to_predict):
     for mv in client.search_model_versions("name='incc_model'"):
         print(f"Version: {mv.version}, Stage: {mv.current_stage}")
 
-        # Step 1: Get run_id from model version
-        model_version_info = client.get_model_version(name=mv.name, version=mv.version)
-        run_id = model_version_info.run_id
-
+        # # Step 1: Get run_id from model version
+        # model_version_info = client.get_model_version(name=mv.name, version=mv.version)
+        # run_id = model_version_info.run_id
+        
         if mv.current_stage == "Production":
             model_production = mlflow.pyfunc.load_model(model_uri=f"models:/{mv.name}/{mv.version}")
             break
