@@ -21,8 +21,4 @@ def process_data(datapath):
     print("\nDataFrame após processamento:")
     print(df.head())
 
-    # Preparando os dados para o modelo
-    X = df[['Data']]
-    y = df[['INCC Geral float']]
-
-    return X, y
+    return df

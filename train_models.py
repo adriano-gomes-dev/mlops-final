@@ -91,7 +91,11 @@ def main():
     mlflow.set_experiment("INCC Tracking")
 
     # X, y = process_data('./data/dataset INCC.csv')
-    X, y = process_data('/Users/gms/MLOPS/mlops-final/data/dataset INCC.csv')
+    df = process_data('/Users/gms/MLOPS/mlops-final/data/dataset INCC.csv')
+
+    # Preparando os dados para o modelo
+    X = df[['Data']]
+    y = df[['INCC Geral float']]
 
     # Split treino e teste
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
