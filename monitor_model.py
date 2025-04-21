@@ -8,6 +8,11 @@ from evidently.metric_preset import DataDriftPreset, RegressionPreset
 # Importando bibliotecas deste projeto
 from core.preprocessdata import process_data
 
+import warnings
+from sklearn.exceptions import UndefinedMetricWarning
+
+warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
+
 def load_new_data():
 
     df = process_data('./data/dataset INCC.csv')
@@ -21,7 +26,7 @@ def load_new_data():
     return X, y.astype(float)
 
 def get_predictions(data):
-    print(data.head())
+    #print(data.head())
 
     # Defina as colunas esperadas pelo modelo
     columns = [ "Data" ]
@@ -36,36 +41,55 @@ def get_predictions(data):
     headers = {"Content-Type": "application/json"}
     
     response = requests.post(url, headers=headers, json=instances)
-    print(response)
+    #print(response)
     predictions = response.json()
     # predictions = predictions.get("predictions")
-    print(predictions)
+    #print(predictions)
     return predictions
 
 # Avaliar degradação do modelo
-def evaluate_model(df, y):
+def evaluate_model(df, y, new_data=None):
 
-    print("Avaliando modelo com dados originais")
-    df["prediction"] = get_predictions(df)
-    df["prediction"] = df["prediction"].astype(float)
-    df["target"] = y
+    if new_data is None:
+        print("Avaliando modelo com dados originais")
+        df["prediction"] = get_predictions(df)
+        df["prediction"] = df["prediction"].astype(float)
+        df["target"] = y
 
-    report = Report(metrics=[DataDriftPreset(), RegressionPreset()])
-    report.run(reference_data=df, current_data=df)
-    report.save_html("monitoring_report_df.html")
+        report = Report(metrics=[DataDriftPreset(), RegressionPreset()])
+        report.run(reference_data=df, current_data=df)
+        report.save_html("monitoring_report_df.html")
 
-    report_dict = report.as_dict()
-    drift_score = report_dict["metrics"][0]["result"]["dataset_drift"]
+        report_dict = report.as_dict()
+        drift_score = report_dict["metrics"][0]["result"]["dataset_drift"]
 
-    print(f"Score de drift: {drift_score}")
-    drift_by_columns = report_dict["metrics"][1]["result"].get("drift_by_columns", {})
-    print(f"Coluns drift: {drift_by_columns}")
-    return drift_score, drift_by_columns
+        print(f"Score de drift: {drift_score}")
+        drift_by_columns = report_dict["metrics"][1]["result"].get("drift_by_columns", {})
+        #print(f"Coluns drift: {drift_by_columns}")
+        return drift_score, drift_by_columns
+    else:
+        print("Avaliando modelo com dados novos")
+        new_data["prediction"] = get_predictions(new_data)
+        new_data["prediction"] = new_data["prediction"].astype(float)
+        new_data["target"] = y
+
+        report = Report(metrics=[DataDriftPreset(), RegressionPreset()])
+        report.run(reference_data=df, current_data=new_data)
+        report.save_html("monitoring_report_new_data.html")
+
+        report_dict = report.as_dict()
+        drift_score = report_dict["metrics"][0]["result"]["dataset_drift"]
+
+        print(f"Score de drift: {drift_score}")
+        drift_by_columns = report_dict["metrics"][1]["result"].get("drift_by_columns", {})
+        #print(f"Coluns drift: {drift_by_columns}")
+        return drift_score, drift_by_columns
+
 
 def simulate_drift(df_examples):
     new_data = df_examples.copy()
     # Mudamos algumas colunas para simular mudanças nos padrões dos dados
-    new_data["Data"] = new_data["Data"].apply(lambda x: x*-10)
+    new_data["Data"] = new_data["Data"].apply(lambda x: x+100)
     
     print("Criado dataset artificialmente alterado para simular drift.")
     return new_data
@@ -89,7 +113,7 @@ def main():
     
     # Simular drift
     new_data = simulate_drift(df_examples)
-    drift_score, drift_by_columns = evaluate_model(new_data, y)
+    drift_score, drift_by_columns = evaluate_model(df_examples, y, new_data)
     check_for_drift(drift_score, drift_by_columns)
 
 if __name__ == "__main__":
