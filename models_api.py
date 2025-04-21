@@ -10,6 +10,9 @@ import pandas as pd
 import mlflow
 from mlflow.tracking import MlflowClient
 
+# Importando bibliotecas deste projeto
+from core.deployment import get_prediction_from_production_model
+
 # API - FastAPI
 # prescisa instalar o fastapi
 # pip install fastapi[standard]

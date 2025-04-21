@@ -1,10 +1,12 @@
 import pandas as pd
-from preprocessdata import process_data
 import numpy as np
 import requests
 
 from evidently.report import Report
 from evidently.metric_preset import DataDriftPreset, RegressionPreset
+
+# Importando bibliotecas deste projeto
+from core.preprocessdata import process_data
 
 def load_new_data():
 
