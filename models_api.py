@@ -28,6 +28,7 @@ async def create_items(items: List[Item]):
     results = []
     for item in items:
         results.append(get_prediction_from_production_model(item.Data))
+    
     return results
 
 @app.get("/")
@@ -37,10 +38,6 @@ async def read_root():
 @app.get("/predict/{date}")
 async def predict(date: str):
     return {"date to predict": get_prediction_from_production_model(date)}
-
-@app.get("/luigi/{var}")
-async def luigi(var: str):
-    return {"var": var}
 
 def get_prediction_from_production_model(value_to_predict):
     # Set the tracking URI to the local MLflow server
