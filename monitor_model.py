@@ -1,6 +1,7 @@
-import pandas as pd
-import numpy as np
+import logging
 import requests
+import os
+from datetime import datetime, timedelta
 
 from evidently.report import Report
 from evidently.metric_preset import DataDriftPreset, RegressionPreset
@@ -10,6 +11,11 @@ from core.preprocessdata import process_data
 
 import warnings
 from sklearn.exceptions import UndefinedMetricWarning
+
+log_name = 'date.log'
+
+logging.basicConfig(filename=log_name, level=logging.INFO, format='%(asctime)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
 
@@ -41,10 +47,8 @@ def get_predictions(data):
     headers = {"Content-Type": "application/json"}
     
     response = requests.post(url, headers=headers, json=instances)
-    #print(response)
+    print(response)
     predictions = response.json()
-    # predictions = predictions.get("predictions")
-    #print(predictions)
     return predictions
 
 # Avaliar degradação do modelo
@@ -65,7 +69,6 @@ def evaluate_model(df, y, new_data=None):
 
         print(f"Score de drift: {drift_score}")
         drift_by_columns = report_dict["metrics"][1]["result"].get("drift_by_columns", {})
-        #print(f"Coluns drift: {drift_by_columns}")
         return drift_score, drift_by_columns
     else:
         print("Avaliando modelo com dados novos")
@@ -82,9 +85,13 @@ def evaluate_model(df, y, new_data=None):
 
         print(f"Score de drift: {drift_score}")
         drift_by_columns = report_dict["metrics"][1]["result"].get("drift_by_columns", {})
-        #print(f"Coluns drift: {drift_by_columns}")
         return drift_score, drift_by_columns
 
+def retrain_model(message):
+    print("Treinando novo modelo...")
+    os.system("python3 train_models.py")
+    logger.info(f"Re-trained|{message}|{datetime.today().strftime('%d/%m/%Y')}")
+    print("Treino finalizado!")
 
 def simulate_drift(df_examples):
     new_data = df_examples.copy()
@@ -97,15 +104,27 @@ def simulate_drift(df_examples):
 def check_for_drift(drift_score, drift_by_columns):
     num_columns_drift = sum(1 for col, values in drift_by_columns.items() if values.get("drift_detected", False))
     if drift_score > 0.5:
-        print("Drift detectado no Dataset")
-        #os.system("python3 churn.py")
+        retrain_model("Drift detectado no Dataset")
     else:
         if num_columns_drift >= 1:
-            print(f"Drift detectado em {num_columns_drift} colunas! Treinando novo modelo...")
-            #os.system("python3 churn.py")
+            retrain_model(f"Drift detectado em {num_columns_drift} colunas")
         else:
             print("Modelo ainda está bom, sem necessidade de re-treinamento.")
             print("Nenhum drift detectado nas colunas e no dataset")
+
+def check_last_train_date():
+    current_date = datetime.today()
+    try:
+        with open(log_name) as log:
+            lines = log.readlines()
+            last_log = lines[0]
+        log_date_str = last_log.split('|')[-1]
+        log_date = datetime.strptime(log_date_str, '%d/%m/%Y\n')
+        if (log_date + timedelta(days= 365)) < current_date:
+            retrain_model("Intervalo de 1 ano")
+    except:
+        retrain_model("Não identificado último log de treino")
+
 
 def main():
     df_examples, y = load_new_data()
@@ -115,6 +134,7 @@ def main():
     new_data = simulate_drift(df_examples)
     drift_score, drift_by_columns = evaluate_model(df_examples, y, new_data)
     check_for_drift(drift_score, drift_by_columns)
+    check_last_train_date()
 
 if __name__ == "__main__":
     main()

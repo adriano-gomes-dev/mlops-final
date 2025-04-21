@@ -8,3 +8,4 @@ __pycache__/*
 monitor.py
 monitoring_report_df.html
 monitoring_report_new_data.html
+date.log

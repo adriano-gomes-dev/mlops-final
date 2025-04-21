@@ -16,7 +16,7 @@ from core.deployment import get_prediction_from_production_model
 # API - FastAPI
 # prescisa instalar o fastapi
 # pip install fastapi[standard]
-# e rodar com o comando: python -m fastapi dev main.py
+# e rodar com o comando: python -m fastapi dev prediction_api.py
 from typing import List
 import fastapi
 from pydantic import BaseModel
@@ -27,7 +27,7 @@ class Item(BaseModel):
 app = fastapi.FastAPI()
 
 @app.post("/items/")
-async def create_items(items: List[Item]):
+async def return_multiple_predictions(items: List[Item]):
     results = []
     for item in items:
         results.append(get_prediction_from_production_model(item.Data))
