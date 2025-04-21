@@ -4,16 +4,22 @@ import numpy as np
 import requests
 import evidently
 from evidently import Report
-from evidently import DataDefinition
+from evidently import DataDefinition, Regression
 from evidently.presets import RegressionPreset
 from evidently import ColumnMapping
 
 
 def load_new_data():
 
-    X, y = process_data('./data/dataset INCC.csv')
-    #X, y = process_data('/Users/gms/MLOPS/mlops-final/data/dataset INCC.csv')
-    return X, y
+    df = process_data('./data/dataset INCC.csv')
+    # df = process_data('/Users/gms/MLOPS/mlops-final/data/dataset INCC.csv')
+    df = df.sample(30)  # Pegamos exemplos aleatórios para testar
+
+    # Preparando os dados para o modelo
+    X = df[['Data']]
+    y = df[['INCC Geral float']]
+
+    return X, y.astype(float)
 
 def get_predictions(data):
     print(data.head())
@@ -28,27 +34,34 @@ def get_predictions(data):
         instances.append(instance)
 
 
-    url = "http://127.0.0.1:8000/invocations"
+    url = "http://127.0.0.1:8000/items"
     headers = {"Content-Type": "application/json"}
-    payload = {"instances": instances}
     
-    response = requests.post(url, headers=headers, json=payload)
+    response = requests.post(url, headers=headers, json=instances)
     predictions = response.json()
-    predictions = predictions.get("predictions")
+    # predictions = predictions.get("predictions")
     print(predictions)
     return predictions
 
 # Avaliar degradação do modelo
 def evaluate_model(df, y):
     print("Avaliando modelo com dados originais")
+    df["Data"].astype(float)
     df["prediction"] = get_predictions(df)
     df["prediction"] = df["prediction"].astype(float)
     print(df["prediction"].unique())
     df["target"] = y
     print(df["target"].unique())
+    print(df.head())
+
+    definition = DataDefinition(
+        regression=[Regression(name="Data", target="target", prediction="prediction")]
+        )
+
     report = Report(metrics=[RegressionPreset()])
-    report.run(df, None)
+    report.run(current_data=df, reference_data=df)
     report.save_html("monitoring_report_df.html")
+
     report_dict = report.as_dict()
     drift_score = report_dict["metrics"][0]["result"]["dataset_drift"]
     print(f"Score de drift: {drift_score}")
