@@ -12,7 +12,7 @@ from sklearn.model_selection import train_test_split
 
 # Importando bibliotecas deste projeto
 from core.preprocessdata import process_data
-from core.trains import experiment_linear_regression, experiment_svr
+from core.trains import experiment_linear_regression, experiment_svr, experiment_random_forest_regressor
 from core.deployment import promote_model_to_production_based_on_mse
 
 def main():
@@ -41,6 +41,9 @@ def main():
 
     # Experimento 2: Linear SVR
     experiment_svr(X_train, X_test, y_train, y_test)
+
+    # Experimento 3: Random Forest Regressor
+    experiment_random_forest_regressor(X_train, X_test, y_train, y_test)
 
     # Promove o melhor modelo
     promote_model_to_production_based_on_mse()
