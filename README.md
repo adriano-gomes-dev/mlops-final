@@ -1,19 +1,21 @@
 # Trabalho Final MLOps
 
-Repositório do trabalho final em grupo da disciplina de MLOps - 2015/1 do curso de Pós-graduação lato sensu em nível de Especialização em Engenharia de Software para Aplicações de Ciência de Dados - UFRGS.
+Repositório do trabalho final da disciplina de MLOps - 2015/1 do curso de Pós-Graduação lato sensu em Engenharia de Software para Aplicações de Ciência de Dados - UFRGS, em nível de especialização.
 
 ## Problema
 
 Implementação do pipeline de uma aplicação de Machine Learning (usando práticas MLOps) utilizando o 
-dataset os valores históricos do INCC (Indíce Nacional de Construção Civil) para previsão do crescimento 
+dataset dos valores históricos do INCC (Indíce Nacional de Construção Civil) para previsão do crescimento 
 futuro da taxa utilizando modelos de regressão linear.
 
 ## Estrutura
 
     core/               módulo contendo a implementação das etapas do pipeline
     data/               dataset utilizado
+    analysis.ipynb      notebook da análise exploratória
     monitor_model.py    monitoramento do modelo
     prediction_api.py   implementação da API
+    requirements.txt    dependências necessárias
     train_models.py     script de execução do pipeline
 
 ## Requisitos mínimos
@@ -50,7 +52,7 @@ futuro da taxa utilizando modelos de regressão linear.
 
 1. Inicialização do Mlflow com o comando:
     ```
-    mlflow ui --backend-store-uri sqlite:///mlflow.d
+    mlflow ui --backend-store-uri sqlite:///mlflow.db
     ```
 2. Inicialização da API
     ```
